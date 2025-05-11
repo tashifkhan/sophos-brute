@@ -1,10 +1,6 @@
 import requests
 import xml.etree.ElementTree as ET
-from typing import TypedDict
-
-class Credential(TypedDict):
-    username: str
-    password: str
+from Credentials import Credential
 
 def login(credentials: list[Credential]) -> tuple[bool, int]:
     cred_index = None  
