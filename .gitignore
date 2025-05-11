@@ -11,3 +11,7 @@ wheels/
 
 #env varibles
 .env
+
+.vscode 
+.fleet
+.idea
