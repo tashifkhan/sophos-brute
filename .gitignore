@@ -15,3 +15,6 @@ wheels/
 .vscode 
 .fleet
 .idea
+
+# sensitive files
+known_pass.py
