@@ -41,7 +41,7 @@ def main():
 
     wrong_attempts = 0
 
-    ids_to_try = [enroll for enroll in range(21102006, 22102184)] # + [enroll for enroll in range(21103001, 21103344)]
+    ids_to_try = [enroll for enroll in range(21102001, 22102184)] + [enroll for enroll in range(21103001, 21103344)]
 
     try: 
         for user_id_to_try in ids_to_try:

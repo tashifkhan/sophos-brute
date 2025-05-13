@@ -2,4 +2,4 @@
 
 **Todo**
 
-- [ ] get sophos internet portal login ids
+- [x] get sophos internet portal login ids
