@@ -100,8 +100,8 @@ def main():
                     print(f"Error during login attempt for User ID: {user_id_str}, Password: {password_attempt}: {e_login_attempt}")
                     wrong_attempts += 1
 
-                print("Pausing for 45 seconds after login attempt...")
-                time.sleep(45)
+                print("Pausing for 15 seconds after login attempt...")
+                time.sleep(15)
         
         print("Finished all attempts for all specified User IDs.")
 
